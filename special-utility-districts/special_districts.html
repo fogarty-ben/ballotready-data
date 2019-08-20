@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Special Districts 2019 v. 2020</title>
+    <title>Special Districts Up for Election</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.js">
     </script>
@@ -90,7 +90,7 @@
                           "compare 2019 in red with 2020 in blue!";
         infoPanel.innerHTML = infoDefault;
 
-        function buildMap(map, sourceURL, sourceLayer, label, column, scaleMin, colorMin, scaleMax, colorMax) {
+        function buildMap(map, sourceURL, sourceLayer, column, scaleMin, colorMin, scaleMax, colorMax) {
             map.on('load', function () {
                 map.addLayer({
                     "id": "special-utility-popup",
@@ -137,10 +137,10 @@
         }
 
         buildMap(nineteenMap, 'mapbox://benfogarty-br.cjziokmwa1aqq2jk168b6tqb7-2e5k4',
-                       "Special_Utility_Districts_2019-2", "2019 Special Districts",
+                       "Special_Utility_Districts_2019-2",
                        '2019_special_districts', 1, '#f7d5cf', 2568, '#e3725e')
         buildMap(twentyMap, 'mapbox://benfogarty-br.cjziokmwa1aqq2jk168b6tqb7-2e5k4',
-                       "Special_Utility_Districts_2019-2", "2020 Special Districts",
+                       "Special_Utility_Districts_2019-2",
                        '2020_special_districts', 1, '#5d97bb', 2336, '#2b5168')
 
         var map = new mapboxgl.Compare(nineteenMap, twentyMap, { mousemove: false });
