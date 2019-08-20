@@ -87,7 +87,7 @@
         var infoPanel = document.getElementById('info-panel');
         var infoDefault = "<h3 style='margin-top: 0; margin-bottom: 0.25em'>Special Districts Up for Election</h3>" +
                           "Click on a state or slide back and forth to<br>" +
-                          "compare 2019 in red with 2020 in blue!";
+                          "compare 2019 in red with 2020 in blue";
         infoPanel.innerHTML = infoDefault;
 
         function buildMap(map, sourceURL, sourceLayer, column, scaleMin, colorMin, scaleMax, colorMax) {
@@ -136,11 +136,11 @@
 
         }
 
-        buildMap(nineteenMap, 'mapbox://benfogarty-br.cjziokmwa1aqq2jk168b6tqb7-2e5k4',
-                       "Special_Utility_Districts_2019-2",
+        buildMap(nineteenMap, 'benfogarty-br.cjzk6eutl2qtd2nmolye0m8c3-3iahf',
+                       "Special_Districts_2019-2020",
                        '2019_special_districts', 1, '#f7d5cf', 2568, '#e3725e')
-        buildMap(twentyMap, 'mapbox://benfogarty-br.cjziokmwa1aqq2jk168b6tqb7-2e5k4',
-                       "Special_Utility_Districts_2019-2",
+        buildMap(twentyMap, 'benfogarty-br.cjzk6eutl2qtd2nmolye0m8c3-3iahf',
+                       "Special_Districts_2019-2020",
                        '2020_special_districts', 1, '#5d97bb', 2336, '#2b5168')
 
         var map = new mapboxgl.Compare(nineteenMap, twentyMap, { mousemove: false });
