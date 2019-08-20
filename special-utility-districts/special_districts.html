@@ -87,7 +87,7 @@
         var infoPanel = document.getElementById('info-panel');
         var infoDefault = "<h3 style='margin-top: 0; margin-bottom: 0.25em'>Special Districts Up for Election</h3>" +
                           "Click on a state or slide back and forth to<br>" +
-                          "compare 2019 in red with 2020 in blue";
+                          "compare 2019 (red) with 2020 (blue).";
         infoPanel.innerHTML = infoDefault;
 
         function buildMap(map, sourceURL, sourceLayer, column, scaleMin, colorMin, scaleMax, colorMax) {
@@ -112,11 +112,22 @@
                         'fill-opacity': 1
                     },
                 }, 'state-label')
+                
+                map.addLayer({
+                    "id": "clickable",
+                    "type": "fill",
+                    "source": {
+                        type: 'vector',
+                        url: sourceURL
+                    },
+                    "source-layer": sourceLayer,
+                    'paint': {'fill-color': "rgba(0, 0, 0, 0)"},
+                }, 'state-label');
             });
 
             scale = [[scaleMin, colorMin], [scaleMax, colorMax]]
 
-            map.on('click', 'special-utility-popup', function (e) {
+            map.on('click', 'clickable', function (e) {
                 var coordinates = e.lngLat;
                 var name = "<h4 style='margin-bottom:0.25em;' >" + e.features[0].properties['NAME'] + "</h4>"
                 var description =  "2019: " + e.features[0].properties['2019_special_districts'] +
@@ -126,20 +137,12 @@
                 infoPanel.innerHTML = (infoDefault + name + description);
             });
 
-            map.on('mouseenter', 'special-utility-popup', function () {
-                nineteenMap.getCanvas().style.cursor = "pointer";
-            });
-
-            map.on('mouseleave', 'special-utility-popup', function () {
-                nineteenMap.getCanvas().style.cursor = "";
-            });
-
         }
 
-        buildMap(nineteenMap, 'benfogarty-br.cjzk6eutl2qtd2nmolye0m8c3-3iahf',
+        buildMap(nineteenMap, 'mapbox://benfogarty-br.cjzk6eutl2qtd2nmolye0m8c3-3iahf',
                        "Special_Districts_2019-2020",
                        '2019_special_districts', 1, '#f7d5cf', 2568, '#e3725e')
-        buildMap(twentyMap, 'benfogarty-br.cjzk6eutl2qtd2nmolye0m8c3-3iahf',
+        buildMap(twentyMap, 'mapbox://benfogarty-br.cjzk6eutl2qtd2nmolye0m8c3-3iahf',
                        "Special_Districts_2019-2020",
                        '2020_special_districts', 1, '#5d97bb', 2336, '#2b5168')
 
