@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Special Utility Districts 2019 v. 2020</title>
+    <meta name="viewport"content="initial-scale=1,maximum-scale=1,user-scalable=no"/>
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.js">
+    </script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.css"rel="stylesheet"/>
+    <style>
+        body { margin:0px;
+               padding: 0px;
+             }
+        #map { position:absolute;
+               top:0;
+               bottom:0;
+               width: 100%;
+             }
+    </style>
+</head>
+<body>
+    <style>
+        body {overflow: hidden;}
+ 
+        body * {
+                 -webkit-touch-callout: none;
+                 -webkit-user-select: none;
+                 -moz-user-select: none;
+                 -ms-user-select: none;
+                 user-select: none;
+               }
+                 
+        .map {
+               position: absolute;
+               top: 0;
+               bottom: 0;
+               width: 100%;
+             }
+    </style>
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.1.0/mapbox-gl-compare.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.1.0/mapbox-gl-compare.css' type='text/css' />
+    <div id="2019" class="map"></div>
+    <div id="2020" class="map"></div>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiYmVuZm9nYXJ0eS1iciIsImEiOiJjanppbW9wam4wMHVmM2JwcGFzdmY4bnZlIn0.-e7FqiXrCCDlxg9RyhfL0g';
+        var nineteenMap = new mapboxgl.Map({container:'2019',
+                                            style: 'mapbox://styles/benfogarty-br/cjzixb3c03b3z1crugxsxn79q',
+        });
+        var twentyMap = new mapboxgl.Map(({container:'2020',
+                                           style:'mapbox://styles/benfogarty-br/cjziyfzoj4gad1co76q41or92'}));
+        var map = new mapboxgl.Compare(nineteenMap, twentyMap, {mousemove: false});
+    </script>
+</body>
+</html>
