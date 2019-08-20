@@ -3,10 +3,11 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Special Utility Districts 2019 v. 2020</title>
+    <title>Special Districts 2019 v. 2020</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.js">
     </script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.css" rel="stylesheet" />
     <style>
         body {
@@ -45,27 +46,20 @@
         }
         .map-overlay {
                        position: absolute;
-                       background: rgba(255, 255, 255, 1.0);
+                       background: rgba(255, 255, 255, 0.7);
                        margin-right: 20px;
                        font-family: Arial, sans-serif;
                        overflow: auto;
-                       border-radius: 3px;
+                       border-radius: 10px;
+                       padding: 1em 1em 1em 1em;
                      }
-        .bottom-left {
-            bottom: 5em;
-            left: 3em;
+        .top-right {
+            right: 5%;
+            top: 5%;
         }
         .bottom-right {
             bottom: 5em;
             right: 3em;
-        }
-        .title {
-            margin-top: 3em;
-            margin-left: 25%;
-            margin-right: 25%;
-            width: 40%;
-            padding: 5%;
-            text-align: center;
         }
     </style>
     <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.1.0/mapbox-gl-compare.js'></script>
@@ -74,12 +68,12 @@
         type='text/css' />
     <div id="2019" class="map"></div>
     <div id="2020" class="map"></div>
-    <div id="2019-overlay" class="map-overlay bottom-left">2019 legend</div>
-    <div id="2020-overlay" class="map-overlay bottom-right">2020 legend</div>
+    <div id="info-panel" class="map-overlay top-right"></div>
 
 
 
     <script>
+
         mapboxgl.accessToken = 'pk.eyJ1IjoiYmVuZm9nYXJ0eS1iciIsImEiOiJjanppbW9wam4wMHVmM2JwcGFzdmY4bnZlIn0.-e7FqiXrCCDlxg9RyhfL0g';
         var nineteenMap = new mapboxgl.Map({
             container: '2019',
@@ -90,6 +84,11 @@
             style: 'mapbox://styles/benfogarty-br/cjzk12klv5fnu1cmsc2ir0hf6'
         }));
 
+        var infoPanel = document.getElementById('info-panel');
+        var infoDefault = "<h3 style='margin-top: 0; margin-bottom: 0.25em'>Special Districts Up for Election</h3>" +
+                          "Click on a state or slide back and forth to<br>" +
+                          "compare 2019 in red with 2020 in blue!";
+        infoPanel.innerHTML = infoDefault;
 
         function buildMap(map, sourceURL, sourceLayer, label, column, scaleMin, colorMin, scaleMax, colorMax) {
             map.on('load', function () {
@@ -115,17 +114,16 @@
                 }, 'state-label')
             });
 
+            scale = [[scaleMin, colorMin], [scaleMax, colorMax]]
+
             map.on('click', 'special-utility-popup', function (e) {
                 var coordinates = e.lngLat;
-                var name = "<h3>" + e.features[0].properties['NAME'] + "</h5>"
-                var description =  "2019 Special District Election: " + e.features[0].properties['2019_special_districts'] +
+                var name = "<h4 style='margin-bottom:0.25em;' >" + e.features[0].properties['NAME'] + "</h4>"
+                var description =  "2019: " + e.features[0].properties['2019_special_districts'] +
                                    '<br style="line-spacing: .2em;">' +
-                                   "2020 Special District Election: " + e.features[0].properties['2020_special_districts'];
+                                   "2020: " + e.features[0].properties['2020_special_districts'];
 
-                new mapboxgl.Popup()
-                    .setLngLat(coordinates)
-                    .setHTML(name + description)
-                    .addTo(map)
+                infoPanel.innerHTML = (infoDefault + name + description);
             });
 
             map.on('mouseenter', 'special-utility-popup', function () {
