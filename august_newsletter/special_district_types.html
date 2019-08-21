@@ -66,8 +66,8 @@
     <link rel='stylesheet'
         href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.1.0/mapbox-gl-compare.css'
         type='text/css' />
-    <div id="2019" class="map"></div>
-    <div id="2020" class="map"></div>
+    <div id="landMap" class="map"></div>
+    <div id="utilityMap" class="map"></div>
     <div id="info-panel" class="map-overlay top-right"></div>
 
 
@@ -75,21 +75,25 @@
     <script>
 
         mapboxgl.accessToken = 'pk.eyJ1IjoiYmVuZm9nYXJ0eS1iciIsImEiOiJjanppbW9wam4wMHVmM2JwcGFzdmY4bnZlIn0.-e7FqiXrCCDlxg9RyhfL0g';
-        var nineteenMap = new mapboxgl.Map({
-            container: '2019',
+        var landMap = new mapboxgl.Map({
+            container: 'landMap',
             style: 'mapbox://styles/benfogarty-br/cjzk12klv5fnu1cmsc2ir0hf6',
         });
-        var twentyMap = new mapboxgl.Map(({
-            container: '2020',
+        var utilityMap = new mapboxgl.Map(({
+            container: 'utilityMap',
             style: 'mapbox://styles/benfogarty-br/cjzk12klv5fnu1cmsc2ir0hf6'
         }));
 
         var infoPanel = document.getElementById('info-panel');
-        var infoDefault = "<h3 style='margin-top: 0; margin-bottom: 0.25em'>City Executive and Legislative Positions Up for Election</h3>" +
-                          "Click on a state or slide back and forth to compare the number of city<br>" +
-                          "executive and legislative positions up for election between 2019 (red)<br>" +
-                          "and 2020 (blue).";
-        infoPanel.innerHTML = infoDefault;
+        var infoDefault = "<h3 style='margin-top: 0; margin-bottom: 0.25em'>Land & Utility Special District Positions Up for Election</h3>" +
+                          "In 2019 and 2020, utility district positions, such as water or sewer districts,<br>" +
+                          "are common throughout the whole nation, whereas land district positions,<br>" +
+                          "such as extension districts or predator managemen districts, are mostly<br>" +
+                          " found in less densely populated, western states.<br>" 
+        var infoInstructions = "<br>Click on a state or slide back and forth to compare where the most<br>" +
+                               "land districts (red) and utility districts (blue) are up for election<br>" +
+                                "in 2019 and 2020.";
+        infoPanel.innerHTML = infoDefault + infoInstructions;
 
         function buildMap(map, sourceURL, sourceLayer, column, scaleMin, colorMin, scaleMax, colorMax) {
             map.on('load', function () {
@@ -132,22 +136,22 @@
             map.on('click', 'clickable', function (e) {
                 var coordinates = e.lngLat;
                 var name = "<h4 style='margin-bottom:0.25em;' >" + e.features[0].properties['NAME'] + "</h4>"
-                var description = "2019: City Executive - " + e.features[0].properties['2019_city_executive'] + ", City Legislative - " + e.features[0].properties['2019_city_legislative'] + "<br>" +
-                                  "2020: City Executive - " + e.features[0].properties['2020_city_executive'] + ", City Legislative - " + e.features[0].properties['2020_city_legislative'] + "<br>"
+                var description = "Land: 2019 - " + e.features[0].properties['2019_land'] + ", 2020 - " + e.features[0].properties['2020_land'] + "<br>" +
+                                  "Utility: 2019 - " + e.features[0].properties['2019_utility'] + ", 2020 - " + e.features[0].properties['2020_utility'] + "<br>"
 
                 infoPanel.innerHTML = (infoDefault + name + description);
             });
 
         }
 
-        buildMap(nineteenMap, 'mapbox://benfogarty-br.cjzk6at9a0ll32op5nkig5jgq-6vq9e',
-                       "Cities_ExecutiveLegislative_2019",
-                       ['2019_city_executive', '2019_city_legislative'], 1, '#f7d5cf', 2568, '#e3725e')
-        buildMap(twentyMap, 'mapbox://benfogarty-br.cjzk6at9a0ll32op5nkig5jgq-6vq9e',
-                       "Cities_ExecutiveLegislative_2019",
-                       ['2020_city_executive', '2020_city_legislative'], 1, '#5d97bb', 2336, '#2b5168')
+        buildMap(landMap, 'mapbox://benfogarty-br.cjzlfbcgd2ooz2ipxa9ojwdlo-0i7i2',
+                       "Land__Utility_Special_Districts_",
+                       ['2019_land', '2020_land'], 1, '#f7d5cf', 114, '#e3725e')
+        buildMap(utilityMap, 'mapbox://benfogarty-br.cjzlfbcgd2ooz2ipxa9ojwdlo-0i7i2',
+                       "Land__Utility_Special_Districts_",
+                       ['2019_utility', '2020_utility'], 1, '#5d97bb', 450, '#2b5168')
 
-        var map = new mapboxgl.Compare(nineteenMap, twentyMap, { mousemove: false });
+        var map = new mapboxgl.Compare(landMap, utilityMap, { mousemove: true });
 
     </script>
 </body>
