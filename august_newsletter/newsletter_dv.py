@@ -88,6 +88,32 @@ def augment_geojson_special_districts(df, geojson):
 
     return geojson
 
+def augment_geojson_special_district_types(df, geojson):
+    for d in geojson['features']:
+        properties = d['properties']
+        #2019
+        if sum((df.state == properties['NAME']) & (df.next_election_year == 2019) & (df.type == 'land')):
+            properties['2019_land'] = int(df.loc[(df.state == properties['NAME']) & (df.next_election_year == 2019) & (df.level == 'land'), 'count'].iloc[0])
+        else:
+            properties['2019_land'] = 0
+        if sum((df.state == properties['NAME']) & (df.next_election_year == 2019) & (df.level == 'utility')):
+            properties['2019_utility'] = int(df.loc[(df.state == properties['NAME']) & (df.next_election_year == 2019) & (df.level == 'utility'), 'count'].iloc[0])
+        else:
+            properties['2019_utility'] = 0
+
+        #2020
+        if sum((df.state == properties['NAME']) & (df.next_election_year == 2020) & (df.level == 'land')):
+            properties['2020_land] = int(df.loc[(df.state == properties['NAME']) & (df.next_election_year == 2020) & (df.level == 'land'), 'count'].iloc[0])
+        else:
+            properties['2020_land'] = 0
+        if sum((df.state == properties['NAME']) & (df.next_election_year == 2020) & (df.level == 'utility')):
+            properties['2020_utility'] = int(df.loc[(df.state == properties['NAME']) & (df.next_election_year == 2020) & (df.level == 'utility'), 'count'].iloc[0])
+        else:
+            properties['2020_utility'] = 0
+
+    return geojson
+
+
 def augment_geojson_cities(df, geojson):
     for d in geojson['features']:
         properties = d['properties']
@@ -118,14 +144,17 @@ def save_geojson(geojson, filepath):
     with open(filepath, 'w') as f:
         json.dump(geojson, f)
 
-def run(data_fp, geojson_fp, output_fp, special_districts=False, cities=False):
-    assert special_districts or cities, 'Must specify one of special districts or cities'
+def run(data_fp, geojson_fp, output_fp, special_districts=False, cities=False,
+        special_district_types=False):
+    assert special_districts or cities or special_district_types, 'Must specify one of special districts or cities'
     data = load_data_file(data_fp)
     geojson = load_geojson(geojson_fp)
     if special_districts:
         geojson = augment_geojson_special_districts(data, geojson)
     elif cities:
         geojson = augment_geojson_cities(data, geojson)
+    elif special_district_types:
+        geojson = augment_geojson_special_district_types(data, geojson)
     save_geojson(geojson, output_fp)
 
 
