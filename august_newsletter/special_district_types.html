@@ -144,14 +144,14 @@
 
         }
 
-        buildMap(landMap, 'mapbox://benfogarty-br.cjzliq3lm01j12iml7m38h78l-3av64',
+        buildMap(landMap, 'mapbox://benfogarty-br.cjzlj0c1d36p62imom126zfoa-0kq5j',
                        "Land__Utility_Districts_2019-202",
-                       ['2019_land', '2020_land'], 1, '#f7d5cf', 127, '#e3725e')
-        buildMap(utilityMap, 'mapbox://benfogarty-br.cjzliq3lm01j12iml7m38h78l-3av64',
+                       ['2019_land', '2020_land'], 1, '#f7d5cf', 132, '#e3725e')
+        buildMap(utilityMap, 'mapbox://benfogarty-br.cjzlj0c1d36p62imom126zfoa-0kq5j4',
                        "Land__Utility_Districts_2019-202",
                        ['2019_utility', '2020_utility'], 1, '#5d97bb', 491, '#2b5168')
 
-        var map = new mapboxgl.Compare(landMap, utilityMap, { mousemove: true });
+        var map = new mapboxgl.Compare(landMap, utilityMap, { mousemove: false });
 
     </script>
 </body>
