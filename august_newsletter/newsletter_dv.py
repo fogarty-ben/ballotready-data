@@ -156,5 +156,3 @@ def run(data_fp, geojson_fp, output_fp, special_districts=False, cities=False,
     elif special_district_types:
         geojson = augment_geojson_special_district_types(data, geojson)
     save_geojson(geojson, output_fp)
-
-
