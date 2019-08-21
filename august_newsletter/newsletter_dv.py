@@ -93,21 +93,21 @@ def augment_geojson_special_district_types(df, geojson):
         properties = d['properties']
         #2019
         if sum((df.state == properties['NAME']) & (df.next_election_year == 2019) & (df.type == 'land')):
-            properties['2019_land'] = int(df.loc[(df.state == properties['NAME']) & (df.next_election_year == 2019) & (df.level == 'land'), 'count'].iloc[0])
+            properties['2019_land'] = int(df.loc[(df.state == properties['NAME']) & (df.next_election_year == 2019) & (df.type == 'land'), 'count'].iloc[0])
         else:
             properties['2019_land'] = 0
-        if sum((df.state == properties['NAME']) & (df.next_election_year == 2019) & (df.level == 'utility')):
-            properties['2019_utility'] = int(df.loc[(df.state == properties['NAME']) & (df.next_election_year == 2019) & (df.level == 'utility'), 'count'].iloc[0])
+        if sum((df.state == properties['NAME']) & (df.next_election_year == 2019) & (df.type == 'utility')):
+            properties['2019_utility'] = int(df.loc[(df.state == properties['NAME']) & (df.next_election_year == 2019) & (df.type == 'utility'), 'count'].iloc[0])
         else:
             properties['2019_utility'] = 0
 
         #2020
-        if sum((df.state == properties['NAME']) & (df.next_election_year == 2020) & (df.level == 'land')):
-            properties['2020_land] = int(df.loc[(df.state == properties['NAME']) & (df.next_election_year == 2020) & (df.level == 'land'), 'count'].iloc[0])
+        if sum((df.state == properties['NAME']) & (df.next_election_year == 2020) & (df.type == 'land')):
+            properties['2020_land'] = int(df.loc[(df.state == properties['NAME']) & (df.next_election_year == 2020) & (df.type == 'land'), 'count'].iloc[0])
         else:
             properties['2020_land'] = 0
-        if sum((df.state == properties['NAME']) & (df.next_election_year == 2020) & (df.level == 'utility')):
-            properties['2020_utility'] = int(df.loc[(df.state == properties['NAME']) & (df.next_election_year == 2020) & (df.level == 'utility'), 'count'].iloc[0])
+        if sum((df.state == properties['NAME']) & (df.next_election_year == 2020) & (df.type == 'utility')):
+            properties['2020_utility'] = int(df.loc[(df.state == properties['NAME']) & (df.next_election_year == 2020) & (df.type == 'utility'), 'count'].iloc[0])
         else:
             properties['2020_utility'] = 0
 
