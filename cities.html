@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>City Positions Up for Election</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.js">
+    </script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <style>
+        body {
+            overflow: hidden;
+        }
+
+        body * {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+        .map-overlay {
+                       position: absolute;
+                       background: rgba(255, 255, 255, 0.7);
+                       margin-right: 20px;
+                       font-family: Arial, sans-serif;
+                       overflow: auto;
+                       border-radius: 10px;
+                       padding: 1em 1em 1em 1em;
+                     }
+        .top-right {
+            right: 2.5%;
+            top: 2.5%;
+        }
+        .bottom-right {
+            bottom: 5em;
+            right: 3em;
+        }
+    </style>
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.1.0/mapbox-gl-compare.js'></script>
+    <link rel='stylesheet'
+        href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.1.0/mapbox-gl-compare.css'
+        type='text/css' />
+    <div id="2019" class="map"></div>
+    <div id="2020" class="map"></div>
+    <div id="info-panel" class="map-overlay top-right"></div>
+
+
+
+    <script>
+
+        mapboxgl.accessToken = 'pk.eyJ1IjoiYmVuZm9nYXJ0eS1iciIsImEiOiJjanppbW9wam4wMHVmM2JwcGFzdmY4bnZlIn0.-e7FqiXrCCDlxg9RyhfL0g';
+        var nineteenMap = new mapboxgl.Map({
+            container: '2019',
+            style: 'mapbox://styles/benfogarty-br/cjzk12klv5fnu1cmsc2ir0hf6',
+        });
+        var twentyMap = new mapboxgl.Map(({
+            container: '2020',
+            style: 'mapbox://styles/benfogarty-br/cjzk12klv5fnu1cmsc2ir0hf6'
+        }));
+
+        var infoPanel = document.getElementById('info-panel');
+        var infoDefault = "<h3 style='margin-top: 0; margin-bottom: 0.25em'>City Executive and Legislative Positions Up for Election</h3>" +
+                          "Click on a state or slide back and forth to compare the number of city<br>" +
+                          "executive and legislative positions up for election between 2019 (red)<br>" +
+                          "and 2020 (blue).";
+        infoPanel.innerHTML = infoDefault;
+
+        function buildMap(map, sourceURL, sourceLayer, column, scaleMin, colorMin, scaleMax, colorMax) {
+            map.on('load', function () {
+                map.addLayer({
+                    "id": "special-districts",
+                    "type": "fill",
+                    "source": {
+                        type: 'vector',
+                        url: sourceURL
+                    },
+                    "source-layer": sourceLayer,
+                    'filter': ['any', ['>=', column[0], 1], ['>=', column[1], 1]],
+                    'paint': {
+                        'fill-color': [
+                            'interpolate',
+                            ['linear'],
+                            ['+', ['get', column[0]], ['get', column[1]]],
+                            scaleMin, colorMin,
+                            scaleMax, colorMax
+                        ],
+                        'fill-opacity': 1
+                    },
+                }, 'state-label')
+
+            map.addLayer({
+                    "id": "clickable",
+                    "type": "fill",
+                    "source": {
+                        type: 'vector',
+                        url: sourceURL
+                    },
+                    "source-layer": sourceLayer,
+                    'paint': {'fill-color': "rgba(0, 0, 0, 0)"},
+                }, 'state-label');
+            });
+
+
+            scale = [[scaleMin, colorMin], [scaleMax, colorMax]]
+
+            map.on('click', 'clickable', function (e) {
+                var coordinates = e.lngLat;
+                var name = "<h4 style='margin-bottom:0.25em;' >" + e.features[0].properties['NAME'] + "</h4>"
+                var description = "2019: City Executive - " + e.features[0].properties['2019_city_executive'] + ", City Legislative - " + e.features[0].properties['2019_city_legislative'] + "<br>" +
+                                  "2020: City Executive - " + e.features[0].properties['2020_city_executive'] + ", City Legislative - " + e.features[0].properties['2020_city_legislative'] + "<br>"
+
+                infoPanel.innerHTML = (infoDefault + name + description);
+            });
+
+        }
+
+        buildMap(nineteenMap, 'mapbox://benfogarty-br.cjzk6at9a0ll32op5nkig5jgq-6vq9e',
+                       "Cities_ExecutiveLegislative_2019",
+                       ['2019_city_executive', '2019_city_legislative'], 1, '#f7d5cf', 2592, '#e3725e')
+        buildMap(twentyMap, 'mapbox://benfogarty-br.cjzk6at9a0ll32op5nkig5jgq-6vq9e',
+                       "Cities_ExecutiveLegislative_2019",
+                       ['2020_city_executive', '2020_city_legislative'], 1, '#5d97bb', 1697, '#2b5168')
+
+        var map = new mapboxgl.Compare(nineteenMap, twentyMap, { mousemove: false });
+
+    </script>
+</body>
+
+</html>
